@@ -1,0 +1,180 @@
+<invoice><header>
+<InvoiceNo>641838              </InvoiceNo>
+<SONo>427324</SONo>
+<CustomerPO>555/49329019             </CustomerPO>
+<InvoiceDate>2012-01-04</InvoiceDate>
+<DueDate>2012-02-18</DueDate>
+<ShipVia>dhl exp. 9632174</ShipVia>
+<ShipViaAcctNo>9632174</ShipViaAcctNo>
+<FOB>EXW</FOB>
+<ShippedDate>01/04/12</ShippedDate>
+<OurRef>                     &#x20;</OurRef>
+<YourRef>                     &#x20;</YourRef>
+<Project>                     &#x20;</Project>
+<CustType>                     &#x20;</CustType>
+<Terms>NET 45</Terms>
+<DomesticAWB/>
+<IntlAWB/>
+<Origin/>
+<Transport/>
+<Nationality/>
+<TripFlight/>
+<OurContact>Lombard</OurContact>
+<Phone>301 123 4567 </Phone>
+<BillTo> DEUTSCHLAND GmbH                                 </BillTo>
+<BillToAdd1>INDUSTRIESTR. 4</BillToAdd1>
+<BillToAdd2/>
+<BillToAdd3/>
+<BillToCity>DONAUWOERTH</BillToCity>
+<BillToState>   &#x20;</BillToState>
+<BillToZip>D-86609   </BillToZip>
+<BillToCountry>GERMANY</BillToCountry>
+<BillToCountryCode>DE</BillToCountryCode>
+<BillToPhone>49 906 71 4639                          </BillToPhone>
+<BillToFax>49 906 71 2949                          </BillToFax>
+<SoldTo>DEUTSCHLAND GmbH</SoldTo>
+<SoldToAttn>Stefan GROETSCH</SoldToAttn>
+<SoldToAdd1>INDUSTRIESTR. 4</SoldToAdd1>
+<SoldToCity>DONAUWOERTH</SoldToCity>
+<SoldToZip>D-86609   </SoldToZip>
+<SoldToCountry>GERMANY</SoldToCountry>
+<SoldToCountryCode>DE</SoldToCountryCode>
+<SoldToPhone>49 906 71 4639</SoldToPhone>
+<SoldToFax>49 906 71 2949</SoldToFax>
+<ShipTo>EUROCOPTER DEUTSCHLAND GmbH                                 </ShipTo>
+<ShipToAdd1>Dr.-Ludwig-Bolkow-Strabe 3</ShipToAdd1>
+<ShipToAdd2/>
+<ShipToAdd3/>
+<ShipToCity>DONAUWORTH</ShipToCity>
+<ShipToZip>86609     </ShipToZip>
+<ShipToCountry>GERMANY</ShipToCountry>
+<ShipToCountryCode>DE</ShipToCountryCode>
+<ShipToTelephone>49 906 71 4639                          </ShipToTelephone>
+<ShipToFax>49 906 71 2949                          </ShipToFax>
+<Subtotal>118,536.00</Subtotal>
+<Discount>0.00</Discount>
+<Taxes>0.00</Taxes>
+<Misc1>0.00</Misc1>
+<Misc2>0.00</Misc2>
+<Misc3>0.00</Misc3>
+<Misc4>0.00</Misc4>
+<Misc5>0.00</Misc5>
+<Misc6>0.00</Misc6>
+<TaxA>0.00</TaxA>
+<TaxB>0.00</TaxB>
+<FixedMessage>
+*                   JPMORGAN CHASE BANK, NA                                                &#x0D;
+*                   ACCOUNT NUMBER:                 *&#x0D;
+*                   ROUTING NUMBER:                          *&#x0D;
+*                   BENEFICIARY: EADS SUPPLY &amp; SERVICES INC  *&#x0D;
+These commodities, technology or software were exported from the United States&#x0D;
+ in accordance with Export Administration Regulations. &#x0D;
+Diversion contrary to U.S. law prohibited. The commodities may not be resold, &#x0D;
+transferred, transshipped  or reexported without prior authorization by the U.S. Government.&#x0D;
+</FixedMessage>
+<Detail>
+<detail>
+<Line>010   </Line>
+<PartNumber>REF TRU11200-EC2196           </PartNumber>
+<Descr>TRANSFORMER RECTIFIER                             </Descr>
+<PickTicketPackingSlipNo>928981</PickTicketPackingSlipNo>
+<Notes>Governmental Inspection Certificate               </Notes>
+<NSN>SB: 8504.           </NSN>
+<SerialNo>S00274                      </SerialNo>
+<Cnd>NE   </Cnd>
+<FAA/>
+<QtyOrdered>7</QtyOrdered>
+<UOM>EA   </UOM>
+<Shipped>1</Shipped>
+<BackOrder>6</BackOrder>
+<UnitPrice>19,756.00</UnitPrice>
+<Amount>19,756.00</Amount>
+</detail>
+<detail>
+<Line>010   </Line>
+<PartNumber>REF TRU11200-EC2196           </PartNumber>
+<Descr>TRANSFORMER RECTIFIER                             </Descr>
+<PickTicketPackingSlipNo>928981</PickTicketPackingSlipNo>
+<Notes>Governmental Inspection Certificate               </Notes>
+<NSN>SB: 8504.31.4035              </NSN>
+<SerialNo>0274                      </SerialNo>
+<Cnd>NE   </Cnd>
+<FAA/>
+<QtyOrdered>7</QtyOrdered>
+<UOM>EA   </UOM>
+<Shipped>1</Shipped>
+<BackOrder>5</BackOrder>
+<UnitPrice>19,756.00</UnitPrice>
+<Amount>19,756.00</Amount>
+</detail>
+<detail>
+<Line>010   </Line>
+<PartNumber>REF TRU11200-EC2196           </PartNumber>
+<Descr>TRANSFORMER RECTIFIER                             </Descr>
+<PickTicketPackingSlipNo>928981</PickTicketPackingSlipNo>
+<Notes>Governmental Inspection Certificate               </Notes>
+<NSN>SB: 8504.31.4035              </NSN>
+<SerialNo>SB00                      </SerialNo>
+<Cnd>NE   </Cnd>
+<FAA/>
+<QtyOrdered>7</QtyOrdered>
+<UOM>EA   </UOM>
+<Shipped>1</Shipped>
+<BackOrder>4</BackOrder>
+<UnitPrice>19,756.00</UnitPrice>
+<Amount>19,756.00</Amount>
+</detail>
+<detail>
+<Line>010   </Line>
+<PartNumber>REF TRU11200-EC2196           </PartNumber>
+<Descr>TRANSFORMER RECTIFIER                             </Descr>
+<PickTicketPackingSlipNo>928981</PickTicketPackingSlipNo>
+<Notes>Governmental Inspection Certificate               </Notes>
+<NSN>SB: 8504.31.4035              </NSN>
+<SerialNo>SB0                      </SerialNo>
+<Cnd>NE   </Cnd>
+<FAA/>
+<QtyOrdered>7</QtyOrdered>
+<UOM>EA   </UOM>
+<Shipped>1</Shipped>
+<BackOrder>1</BackOrder>
+<UnitPrice>19,756.00</UnitPrice>
+<Amount>19,756.00</Amount>
+</detail>
+<detail>
+<Line>010   </Line>
+<PartNumber>REF TRU11200-EC2196           </PartNumber>
+<Descr>TRANSFORMER RECTIFIER                             </Descr>
+<PickTicketPackingSlipNo>928981</PickTicketPackingSlipNo>
+<Notes>Governmental Inspection Certificate               </Notes>
+<NSN>SB: 8504.31.4035              </NSN>
+<SerialNo>SB52                      </SerialNo>
+<Cnd>NE   </Cnd>
+<FAA/>
+<QtyOrdered>7</QtyOrdered>
+<UOM>EA   </UOM>
+<Shipped>1</Shipped>
+<BackOrder>3</BackOrder>
+<UnitPrice>19,756.00</UnitPrice>
+<Amount>19,756.00</Amount>
+</detail>
+<detail>
+<Line>010   </Line>
+<PartNumber>REF TRU11200-EC2196           </PartNumber>
+<Descr>TRANSFORMER RECTIFIER                             </Descr>
+<PickTicketPackingSlipNo>928981</PickTicketPackingSlipNo>
+<Notes>Governmental Inspection Certificate               </Notes>
+<NSN>SB: 8504.31.4035              </NSN>
+<SerialNo>SB                  </SerialNo>
+<Cnd>NE   </Cnd>
+<FAA/>
+<QtyOrdered>7</QtyOrdered>
+<UOM>EA   </UOM>
+<Shipped>1</Shipped>
+<BackOrder>2</BackOrder>
+<UnitPrice>19,756.00</UnitPrice>
+<Amount>19,756.00</Amount>
+</detail>
+</Detail>
+</header>
+</invoice>
