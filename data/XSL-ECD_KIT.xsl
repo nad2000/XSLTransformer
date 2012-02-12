@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+ï»¿<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     version="1.0">
     <xsl:output method="xml" indent="yes"/>
@@ -22,8 +22,8 @@
             <PaymentMeanCode>42</PaymentMeanCode>
             <PaymentMean>Virement</PaymentMean>
             <PaymentConditions><xsl:value-of select="invoice/header/Terms"/></PaymentConditions>
-            <SettlementConditions>Pas d'escompte pour paiement anticipé.</SettlementConditions>
-            <PenaltyConditions>En cas de paiement tardif il sera appliqué une majoration pour intérêt de retard d'un taux égal à 3  fois le taux d'intérêt légal.</PenaltyConditions>
+            <SettlementConditions>Pas d'escompte pour paiement anticipÃ©.</SettlementConditions>
+            <PenaltyConditions>En cas de paiement tardif il sera appliquÃ© une majoration pour intÃ©rÄ™t de retard d'un taux Ã©gal Å• 3  fois le taux d'intÃ©rÄ™t lÃ©gal.</PenaltyConditions>
             <PONum><xsl:value-of select="invoice/header/CustomerPO"/></PONum>
             <TaxMode>EXO</TaxMode>
             <Currency>USD</Currency>

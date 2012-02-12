@@ -1,0 +1,208 @@
+<?xml version="1.0"?>
+<Invoice>
+  <Head>
+    <DematType>C</DematType>
+    <InvoiceType>380</InvoiceType>
+    <InstallmentRequest>0</InstallmentRequest>
+    <InvoiceTreatment>9</InvoiceTreatment>
+    <InvoiceNumber>641838              </InvoiceNumber>
+    <InvoiceDate>2012-01-04</InvoiceDate>
+    <PaymentMeanCode>42</PaymentMeanCode>
+    <PaymentMean>Virement</PaymentMean>
+    <PaymentConditions>NET 45</PaymentConditions>
+    <SettlementConditions>Pas d'escompte pour paiement anticipé.</SettlementConditions>
+    <PenaltyConditions>En cas de paiement tardif il sera appliqué une majoration pour intéręt de retard d'un taux égal ŕ 3  fois le taux d'intéręt légal.</PenaltyConditions>
+    <PONum>555/49329019             </PONum>
+    <TaxMode>EXO</TaxMode>
+    <Currency>USD</Currency>
+    <PaymentDueDate>2012-02-18</PaymentDueDate>
+    <DeliveryDate>2012-01-04</DeliveryDate>
+  </Head>
+  <Party>
+    <PartyType>SU</PartyType>
+    <PartyId>52-2281142</PartyId>
+    <PartyName1>INC</PartyName1>
+    <PartyAddress1>Standish Place</PartyAddress1>
+    <PostalCode>20855</PostalCode>
+    <City>Arlington</City>
+    <Country>USA</Country>
+    <ISOCountryCode>US</ISOCountryCode>
+    <Siret/>
+    <TVAnum>12-3111142</TVAnum>
+    <RCS>RCS STATE OF DELAWARE </RCS>
+    <Status>INC</Status>
+    <Capital/>
+    <CapitalCur>USD</CapitalCur>
+    <InternalDepCode/>
+    <SupplierCode>5025846</SupplierCode>
+  </Party>
+  <Party>
+    <PartyType>BY</PartyType>
+    <PartyID/>
+    <PartyName1>DEUTSCHLAND GmbH</PartyName1>
+    <PartyAddress1>Stefan GROETSCH</PartyAddress1>
+    <PartyAddress2>INDUSTRIESTR. 4</PartyAddress2>
+    <PartyAddress3/>
+    <PartyAddress4/>
+    <PostalCode>D-86609   </PostalCode>
+    <City>DONAUWOERTH</City>
+    <Country>GERMANY</Country>
+    <ISOCountryCode>DE</ISOCountryCode>
+    <TVAnum/>
+  </Party>
+  <Party>
+    <PartyType>IV</PartyType>
+    <PartyID/>
+    <PartyName1> DEUTSCHLAND GmbH                                 </PartyName1>
+    <PartyAddress1/>
+    <PartyAddress2>INDUSTRIESTR. 4</PartyAddress2>
+    <PartyAddress3/>
+    <PartyAddress4/>
+    <PostalCode>D-86609   </PostalCode>
+    <City>DONAUWOERTH</City>
+    <Country>GERMANY</Country>
+    <ISOCountryCode>DE</ISOCountryCode>
+    <TVAnum/>
+  </Party>
+  <Party>
+    <PartyType>DP</PartyType>
+    <PartyID/>
+    <PartyName1>EUROCOPTER DEUTSCHLAND GmbH                                 </PartyName1>
+    <PartyAddress1/>
+    <PartyAddress2>Dr.-Ludwig-Bolkow-Strabe 3</PartyAddress2>
+    <PartyAddress3/>
+    <PartyAddress4/>
+    <PostalCode>86609     </PostalCode>
+    <City>DONAUWORTH</City>
+    <Country>GERMANY</Country>
+    <ISOCountryCode>DE</ISOCountryCode>
+    <TVAnum/>
+  </Party>
+  <Comh>
+    <Desc>COORDONNEES BANCAIRES/BANKING INFORMATION </Desc>
+    <Desc>TEST</Desc>
+    <Desc> ACCOUNT NUMBER:  </Desc>
+    <Desc>ROUTING NUMBER:  </Desc>
+    <Desc>BENEFICIARY: </Desc>
+    <Desc>These commodities, technology or software were exported from the in accordance with </Desc>
+  </Comh>
+  <Line>
+    <LineType>L</LineType>
+    <LineNum>010   </LineNum>
+    <LinePartNumVP/>
+    <PartDesc>TRANSFORMER RECTIFIER                             </PartDesc>
+    <PartDescComp/>
+    <PartDescComp2/>
+    <Quantity>7</Quantity>
+    <UnitOfMeasure>EA   </UnitOfMeasure>
+    <PackQty/>
+    <PackQtyUoM/>
+    <LineItemSubTotal>19,756.00</LineItemSubTotal>
+    <UnitPrice>19,756.00</UnitPrice>
+    <GrossUnitPrice/>
+    <POLineNum/>
+    <TaxPercent/>
+    <TaxCategory>E</TaxCategory>
+  </Line>
+  <Line>
+    <LineType>L</LineType>
+    <LineNum>010   </LineNum>
+    <LinePartNumVP/>
+    <PartDesc>TRANSFORMER RECTIFIER                             </PartDesc>
+    <PartDescComp/>
+    <PartDescComp2/>
+    <Quantity>7</Quantity>
+    <UnitOfMeasure>EA   </UnitOfMeasure>
+    <PackQty/>
+    <PackQtyUoM/>
+    <LineItemSubTotal>19,756.00</LineItemSubTotal>
+    <UnitPrice>19,756.00</UnitPrice>
+    <GrossUnitPrice/>
+    <POLineNum/>
+    <TaxPercent/>
+    <TaxCategory>E</TaxCategory>
+  </Line>
+  <Line>
+    <LineType>L</LineType>
+    <LineNum>010   </LineNum>
+    <LinePartNumVP/>
+    <PartDesc>TRANSFORMER RECTIFIER                             </PartDesc>
+    <PartDescComp/>
+    <PartDescComp2/>
+    <Quantity>7</Quantity>
+    <UnitOfMeasure>EA   </UnitOfMeasure>
+    <PackQty/>
+    <PackQtyUoM/>
+    <LineItemSubTotal>19,756.00</LineItemSubTotal>
+    <UnitPrice>19,756.00</UnitPrice>
+    <GrossUnitPrice/>
+    <POLineNum/>
+    <TaxPercent/>
+    <TaxCategory>E</TaxCategory>
+  </Line>
+  <Line>
+    <LineType>L</LineType>
+    <LineNum>010   </LineNum>
+    <LinePartNumVP/>
+    <PartDesc>TRANSFORMER RECTIFIER                             </PartDesc>
+    <PartDescComp/>
+    <PartDescComp2/>
+    <Quantity>7</Quantity>
+    <UnitOfMeasure>EA   </UnitOfMeasure>
+    <PackQty/>
+    <PackQtyUoM/>
+    <LineItemSubTotal>19,756.00</LineItemSubTotal>
+    <UnitPrice>19,756.00</UnitPrice>
+    <GrossUnitPrice/>
+    <POLineNum/>
+    <TaxPercent/>
+    <TaxCategory>E</TaxCategory>
+  </Line>
+  <Line>
+    <LineType>L</LineType>
+    <LineNum>010   </LineNum>
+    <LinePartNumVP/>
+    <PartDesc>TRANSFORMER RECTIFIER                             </PartDesc>
+    <PartDescComp/>
+    <PartDescComp2/>
+    <Quantity>7</Quantity>
+    <UnitOfMeasure>EA   </UnitOfMeasure>
+    <PackQty/>
+    <PackQtyUoM/>
+    <LineItemSubTotal>19,756.00</LineItemSubTotal>
+    <UnitPrice>19,756.00</UnitPrice>
+    <GrossUnitPrice/>
+    <POLineNum/>
+    <TaxPercent/>
+    <TaxCategory>E</TaxCategory>
+  </Line>
+  <Line>
+    <LineType>L</LineType>
+    <LineNum>010   </LineNum>
+    <LinePartNumVP/>
+    <PartDesc>TRANSFORMER RECTIFIER                             </PartDesc>
+    <PartDescComp/>
+    <PartDescComp2/>
+    <Quantity>7</Quantity>
+    <UnitOfMeasure>EA   </UnitOfMeasure>
+    <PackQty/>
+    <PackQtyUoM/>
+    <LineItemSubTotal>19,756.00</LineItemSubTotal>
+    <UnitPrice>19,756.00</UnitPrice>
+    <GrossUnitPrice/>
+    <POLineNum/>
+    <TaxPercent/>
+    <TaxCategory>E</TaxCategory>
+  </Line>
+  <TaxSummary>
+    <TaxableAmount>118,536.00</TaxableAmount>
+    <TaxPercent/>
+    <TaxAmount/>
+    <TaxCategory>E</TaxCategory>
+  </TaxSummary>
+  <Summary>
+    <NetValue>118,536.00</NetValue>
+    <TotalTaxAmount/>
+    <GrossAmount>118,536.00</GrossAmount>
+  </Summary>
+</Invoice>
