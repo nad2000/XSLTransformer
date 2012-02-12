@@ -10,8 +10,11 @@
 #-------------------------------------------------------------------------------
 #!/usr/bin/env python
 
-import glob, os.path
+import glob, os.path, sys, traceback
 import ConfigParser
+import libxml2, libxslt
+from ftplib import FTP
+
 
 class Rule(object):
     __slots__ = ['name','xpath','xsl','destination']
@@ -48,25 +51,17 @@ class XSLTransformer(object):
         #9 If nothing (no file) was processed since the previous run, "sleep" for a while
     """
 
-    __config = None
+    config = None
     "Configuration"
 
-    __sources = []
-    __rules = dict()
-    __destinations = dict()
-    __xsl = dict()
-
-    def __getattr__(self, name):
-        if name=='sources':
-            return self.__sources
-        elif name=='rules':
-            return self.__rules
-        elif name=='destinations':
-            return self.__destinations
-        elif name=='xsl' or name=='xslt':
-            return self.__xsl
-        else:
-            raise Exception( "Undefined property")
+    sources = []
+    "List of directories to poll"
+    rules = []
+    "List of the rules read from the configuration"
+    destinations = dict()
+    "List of the destination specifications read from the configuration"
+    styles = dict()
+    "XSLT cache"
 
     def __init__(self, config_file=None):
         """
@@ -74,7 +69,7 @@ class XSLTransformer(object):
         and parses it identifying all source folders, XSL selection rules,
         and destinations of transformed files.
         """
-        self.__config = config = ConfigParser.ConfigParser()
+        self.config = config = ConfigParser.ConfigParser()
         try:
             if not( config_file and os.path.exists(config_file) ):
                 config_file = 'XSLTransformer.cfg'
@@ -84,15 +79,15 @@ class XSLTransformer(object):
             raise Exception("Failed to read condfiguration file")
         sources = config.items('sources')
         if sources:
-            self.__sources = [v for (k,v) in sources]
+            self.sources = [v for (k,v) in sources]
         else:
             raise Exception("Missing source directories!")
         for sec in config.sections():
             items = config.items(sec)
             if sec.startswith('rule'):
-                self.__rules[sec] = Rule(sec, items)
+                self.rules.append( Rule(sec, items) )
             if sec.startswith('dest'):
-                self.__destinations[sec] = Destination(sec, items)
+                self.destinations[sec] = Destination(sec, items)
         pass
 
     def process_file(self, file_name):
@@ -103,10 +98,69 @@ class XSLTransformer(object):
         4. transforms;
         5. transfers;
         """
+
+        # TODO: check if file is not locked
+
+        try:
+            doc = libxml2.parseFile(file_name)
+        except:
+            # TODO: log failed file parsing
+            return
+
+        rule_to_apply = None
+        for rule in self.rules:
+            try:
+                if doc.xpathEval( rule.xpath ):
+                    rule_to_apply = rule
+                    break
+            except:
+                # TODO: handly exeptionin XPath evaluation
+                print "Unexpected error:", sys.exc_info()[0]
+                pass
+        if not(rule_to_apply):
+            # No rule found TODO: log
+            return
+
+        if not self.styles.has_key( rule.xsl ):
+            try:
+                styledoc = libxml2.parseFile( rule.xsl)
+                self.styles[rule.xsl] = libxslt.parseStylesheetDoc(styledoc)
+            except:
+                # TODO: log failed XSLT parsing
+                print "Unexpected error:", sys.exc_info()[0]
+                return
+        style = self.styles[rule.xsl]
+
+        try:
+            file_name_main, file_name_ext = os.path.splitext(file_name)
+
+            output_file_name = file_name_main+'_output'+file_name_ext
+            result = style.applyStylesheet(doc, None)
+            style.saveResultToFilename(output_file_name, result, 0)
+        except:
+            # TODO: log failed transformation
+            print "Unexpected error:", sys.exc_info()[0]
+            return
         pass
 
+        try:
+            dest = self.destinations[rule_to_apply.destination]
+            ftp=FTP()
+            ftp.connect( dest.host)
+            ftp.login( dest.user, dest.password)
+            output_file = open(output_file_name,'rb')
+            ftp.storbinary('STOR %s/%s' %
+                (dest.location, os.path.basename(output_file_name) ), output_file)
+        except:
+            # TODO: log failed transfer
+            tb = traceback.format_exc()
+            print "Unexpected error:", sys.exc_info()[0]
+            print tb
+
+        # TODO: move the file somewhere else and perhaps log the success
+
     def process_sources(self):
-        for source in self.__sources:
+        for source in self.sources:
             xml_files = set(
                 glob.glob( os.path.join( source, '*.xml') )
                 +glob.glob( os.path.join( source, '*.XML') ))
@@ -114,8 +168,17 @@ class XSLTransformer(object):
                 self.process_file( f)
 
     def start(self):
+        """
+        Run main loop
+        """
         self.process_sources()
 
+    def close(self):
+        #TODO: cleaning
+        #style.freeStylesheet()
+        #doc.freeDoc()
+        #result.freeDoc()
+        pass
 
 def main():
     transformer = XSLTransformer( 'XSLTransformer.cfg')

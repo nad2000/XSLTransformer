@@ -1,17 +1,17 @@
 ﻿[PyScripter]
-Version=2.4.3.0
+Version=2.4.4.0
 
 [Project]
 ClassName=TProjectRootNode
-StoreRelativePaths=FALSE
-ShowFileExtensions=FALSE
+StoreRelativePaths=TRUE
+ShowFileExtensions=TRUE
 
 [Project\ChildNodes\Node0]
 ClassName=TProjectFilesNode
 
 [Project\ChildNodes\Node0\ChildNodes\Node0]
 ClassName=TProjectFileNode
-FileName=P:\projects\XSLTransformer\process.py
+FileName=process.py
 
 [Project\ChildNodes\Node0\ChildNodes]
 Count=1
