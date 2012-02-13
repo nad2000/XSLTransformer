@@ -8,13 +8,12 @@
 # Created:  2011-02-12
 # Licence:  WTFPL
 #-------------------------------------------------------------------------------
-#!/usr/bin/env python
 
-import glob, os.path, sys, traceback
+import glob, os, os.path, sys, traceback, time, threading
 import ConfigParser
 import libxml2, libxslt
 from ftplib import FTP
-
+import win32evtlogutil
 
 class Rule(object):
     __slots__ = ['name','xpath','xsl','destination']
@@ -37,17 +36,17 @@ class Destination(object):
         self.password = items['password']
         self.location = items['location']
 
-class XSLTransformer(object):
+class XSLTransformer(threading.Thread):
     """
-    Object impometing XML file processing (transformin and tranfering according the configuration):
-        #1 Load configuration
-        #2 Poll the source dirctories (loop through the list of the source directories)
-        #3 Loop through the new files
-        #4 Parse file
-        #5 Find transformation and routing rule arrording to the rules
-        #6 Load XSLT file (if not already chached)
-        #7 Parse file
-        #8 Transfer file
+    Object implementing XML file processing (transforming and tranfering according to the configuration):
+        #1 Load configuration;
+        #2 Poll the source dirctories (looping through the list of the source directories);
+        #3 Loop through the new files;
+        #4 Parse each file;
+        #5 Find transformation and routing rule;
+        #6 Load XSLT file (if not already chached);
+        #7 Transform the parsed source file;
+        #8 Transfer file to the destination;
         #9 If nothing (no file) was processed since the previous run, "sleep" for a while
     """
 
@@ -90,22 +89,39 @@ class XSLTransformer(object):
                 self.destinations[sec] = Destination(sec, items)
         pass
 
+    def log_error( self, message):
+        """
+        Log an error message into Event Log
+        """
+        win32evtlogutil.ReportEvent(
+            'XSLTransformer', 4, 0,
+            win32evtlogutil.win32evtlog.EVENTLOG_ERROR_TYPE,
+            message,
+            str(traceback.print_exc(sys.exc_info()) ) )
+
     def process_file(self, file_name):
         """
-        1. parses file;
+        1. parses the source file;
         2. detects the rule to apply;
-        3. parses XSL and loades into the cache (if have not yet loaded)
+        3. parses XSL and loades into the cache (if it has not yet loaded)
         4. transforms;
-        5. transfers;
+        5. transfers to the destination;
+        6. moves into an archive directory;
         """
 
-        # TODO: check if file is not locked
+        try:
+            source_file = open( file_name, 'rb')
+        except:
+            # TODO: file might be locked, procede with the next
+            return
 
         try:
-            doc = libxml2.parseFile(file_name)
+            doc = libxml2.parseDoc( source_file.read() )
         except:
-            # TODO: log failed file parsing
+            self.log_error( "Error parsing source file %s" % file_name )
             return
+        finally:
+            source_file.close()
 
         rule_to_apply = None
         for rule in self.rules:
@@ -114,11 +130,10 @@ class XSLTransformer(object):
                     rule_to_apply = rule
                     break
             except:
-                # TODO: handly exeptionin XPath evaluation
-                print "Unexpected error:", sys.exc_info()[0]
+                self.log_error( "Error evaluating XPath %s with file " % (rule.xpath, file_name) )
                 pass
         if not(rule_to_apply):
-            # No rule found TODO: log
+            # self.log_error( "No rule found for %s" % file_name )
             return
 
         if not self.styles.has_key( rule.xsl ):
@@ -126,22 +141,25 @@ class XSLTransformer(object):
                 styledoc = libxml2.parseFile( rule.xsl)
                 self.styles[rule.xsl] = libxslt.parseStylesheetDoc(styledoc)
             except:
-                # TODO: log failed XSLT parsing
-                print "Unexpected error:", sys.exc_info()[0]
+                self.log_error( "Error parsing XSL/XSLT %s" % rule.xsl )
                 return
         style = self.styles[rule.xsl]
 
         try:
-            file_name_main, file_name_ext = os.path.splitext(file_name)
+            output_dirname = os.path.join( os.path.dirname( file_name), '.output')
+            if not os.path.exists(output_dirname):
+                os.makedirs(output_dirname)
 
-            output_file_name = file_name_main+'_output'+file_name_ext
+            file_name_basename = os.path.basename( file_name)
+            output_file_name = os.path.join(
+                output_dirname,
+                file_name_basename[3:] if file_name_basename.startswith('IN-')
+                                       else file_name_basename  )
             result = style.applyStylesheet(doc, None)
             style.saveResultToFilename(output_file_name, result, 0)
         except:
-            # TODO: log failed transformation
-            print "Unexpected error:", sys.exc_info()[0]
-            return
-        pass
+            self.log_error( "Failed to tranfrom file %s with %s" % (file_name, rule.xsl) )
+            return False
 
         try:
             dest = self.destinations[rule_to_apply.destination]
@@ -152,26 +170,54 @@ class XSLTransformer(object):
             ftp.storbinary('STOR %s/%s' %
                 (dest.location, os.path.basename(output_file_name) ), output_file)
         except:
-            # TODO: log failed transfer
-            tb = traceback.format_exc()
-            print "Unexpected error:", sys.exc_info()[0]
-            print tb
+            self.log_error( "Failed to tranfer file %s to the destination %s" %
+                            (output_file_name, rule_to_apply.destination) )
+            return False
 
-        # TODO: move the file somewhere else and perhaps log the success
+
+        archive_name = os.path.join(
+            os.path.dirname( file_name),
+            '.archive',
+            os.path.basename( file_name))
+        try:
+            # os.renames(file_name, archive_name)
+            pass
+        except:
+            self.log_error( "Failed to archive file %s" % file_name )
+            return False
+
+        return True
 
     def process_sources(self):
+        processed_file_count = 0
         for source in self.sources:
             xml_files = set(
                 glob.glob( os.path.join( source, '*.xml') )
                 +glob.glob( os.path.join( source, '*.XML') ))
             for f in xml_files:
-                self.process_file( f)
+                if self.process_file( f):
+                    processed_file_count += 1
+        return processed_file_count
 
-    def start(self):
+    def run( self):
         """
         Run main loop
         """
-        self.process_sources()
+        while True:
+            self.exit_if_should()
+            processed_files = self.process_sources()
+            self.exit_if_should()
+            if not processed_files:
+                # if no files have been processed sleep for 10sec
+                time.sleep( 10)
+
+    def exit_if_should( self):
+        """
+        Check if received SIGNAL to stop the service
+        """
+        if getattr(sys,'stopservice', False):
+            self.close()
+            sys.exit()
 
     def close(self):
         #TODO: cleaning
@@ -182,7 +228,7 @@ class XSLTransformer(object):
 
 def main():
     transformer = XSLTransformer( 'XSLTransformer.cfg')
-    transformer.start()
+    transformer.process_sources()
 
 if __name__ == '__main__':
     main()
