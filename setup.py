@@ -63,15 +63,20 @@ if not buildservice:
         name = NAME ,
         description = DESCRIPTION,
         version = app_version,
-        console = ['service_module.py'],
-            zipfile=None,
-            options = {
-                "py2exe":{
-                    'packages': 'encodings',
-                    'includes': 'win32com,win32service,win32serviceutil,win32event',
-                    "optimize": '2'
-                },
+        console = [
+            {
+                'script':'process.py',
+                'icon_resources': [(1, 'app.ico')]
+            }
+        ],
+        zipfile=None,
+        options = {
+            "py2exe":{
+                'packages': 'encodings',
+                'includes': 'win32com,win32service,win32serviceutil,win32event',
+                "optimize": '2'
             },
+        },
     )
 else:
     print 'Compiling as a Windows service ...'
@@ -79,7 +84,11 @@ else:
         name = NAME,
         description = DESCRIPTION,
         version = '1.00.00',
-            service = [{'modules':["XSLTransformerService"], 'cmdline':'pywin32'}],
+            service = [{
+                'modules':["XSLTransformerService"], 
+                'cmdline':'pywin32',
+                'icon_resources': [(1, 'app.ico')]
+            }],
             zipfile=None,
             options = {
                 'py2exe':{
