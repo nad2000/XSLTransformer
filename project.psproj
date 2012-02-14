@@ -13,8 +13,16 @@ ClassName=TProjectFilesNode
 ClassName=TProjectFileNode
 FileName=process.py
 
+[Project\ChildNodes\Node0\ChildNodes\Node1]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]setup.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node2]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]XSLTransformerService.py
+
 [Project\ChildNodes\Node0\ChildNodes]
-Count=1
+Count=3
 
 [Project\ChildNodes\Node1]
 ClassName=TProjectRunConfiguationsNode

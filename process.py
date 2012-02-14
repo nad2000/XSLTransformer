@@ -68,6 +68,7 @@ class XSLTransformer(threading.Thread):
         and parses it identifying all source folders, XSL selection rules,
         and destinations of transformed files.
         """
+        threading.Thread.__init__()
         self.config = config = ConfigParser.ConfigParser()
         try:
             if not( config_file and os.path.exists(config_file) ):
@@ -109,6 +110,7 @@ class XSLTransformer(threading.Thread):
         6. moves into an archive directory;
         """
 
+        self.exit_if_stopped()
         try:
             source_file = open( file_name, 'rb')
         except:
@@ -180,7 +182,7 @@ class XSLTransformer(threading.Thread):
             '.archive',
             os.path.basename( file_name))
         try:
-            # os.renames(file_name, archive_name)
+            os.renames(file_name, archive_name)
             pass
         except:
             self.log_error( "Failed to archive file %s" % file_name )
@@ -195,6 +197,7 @@ class XSLTransformer(threading.Thread):
                 glob.glob( os.path.join( source, '*.xml') )
                 +glob.glob( os.path.join( source, '*.XML') ))
             for f in xml_files:
+                self.exit_if_stopped()
                 if self.process_file( f):
                     processed_file_count += 1
         return processed_file_count
@@ -204,26 +207,29 @@ class XSLTransformer(threading.Thread):
         Run main loop
         """
         while True:
-            self.exit_if_should()
+            self.exit_if_stopped()
             processed_files = self.process_sources()
-            self.exit_if_should()
+            self.exit_if_stopped()
             if not processed_files:
                 # if no files have been processed sleep for 10sec
                 time.sleep( 10)
 
-    def exit_if_should( self):
+    def exit_if_stopped( self):
         """
         Check if received SIGNAL to stop the service
+        And exit the loop
         """
         if getattr(sys,'stopservice', False):
             self.close()
-            sys.exit()
+            sys.exit(0)
 
     def close(self):
         #TODO: cleaning
         #style.freeStylesheet()
         #doc.freeDoc()
         #result.freeDoc()
+        for style in self.styles:
+            style.freeStylesheet()
         pass
 
 def main():

@@ -62,7 +62,7 @@ if not buildservice:
     setup(
         name = NAME ,
         description = DESCRIPTION,
-        version = app_version,
+        version = VERSION,
         console = [
             {
                 'script':'process.py',
@@ -83,9 +83,9 @@ else:
     setup(
         name = NAME,
         description = DESCRIPTION,
-        version = '1.00.00',
+        version = VERSION,
             service = [{
-                'modules':["XSLTransformerService"], 
+                'modules':["XSLTransformerService"],
                 'cmdline':'pywin32',
                 'icon_resources': [(1, 'app.ico')]
             }],
@@ -93,7 +93,8 @@ else:
             options = {
                 'py2exe':{
                     'packages': 'encodings',
-                    'includes': 'win32com,win32service,win32serviceutil,win32event',
+                    'includes': 'win32com,win32service,win32serviceutil,win32event,' \
+                        'servicemanager,win32evtlogutil,win32evtlog',
                     'optimize': '2'
                 },
             },
