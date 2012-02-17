@@ -9,11 +9,14 @@
 # Licence:  WTFPL
 #-------------------------------------------------------------------------------
 
-import glob, os, os.path, sys, traceback, time, threading
+import glob, os, os.path, sys, traceback, time
 import ConfigParser
 import libxml2, libxslt
 from ftplib import FTP
 import win32evtlogutil
+
+
+DEFALT_CONFIG_FILE = 'XSLTransformer.ini'
 
 class Rule(object):
     __slots__ = ['name','xpath','xsl','destination']
@@ -36,7 +39,7 @@ class Destination(object):
         self.password = items['password']
         self.location = items['location']
 
-class XSLTransformer(threading.Thread):
+class XSLTransformer( object):
     """
     Object implementing XML file processing (transforming and tranfering according to the configuration):
         #1 Load configuration;
@@ -68,15 +71,16 @@ class XSLTransformer(threading.Thread):
         and parses it identifying all source folders, XSL selection rules,
         and destinations of transformed files.
         """
-        threading.Thread.__init__()
-        self.config = config = ConfigParser.ConfigParser()
+
+        self.config = config = ConfigParser.ConfigParser( {'archive':'on'})
         try:
             if not( config_file and os.path.exists(config_file) ):
-                config_file = 'XSLTransformer.cfg'
+                config_file = DEFALT_CONFIG_FILE
             config.read( config_file)
         except:
-            print "Unexpected error:", sys.exc_info()[0]
-            raise Exception("Failed to read condfiguration file")
+            self.log_error( "Failed to read condfiguration file %s" % config_file )
+            raise Exception( "Failed to read condfiguration file %s" % config_file )
+
         sources = config.items('sources')
         if sources:
             self.sources = [v for (k,v) in sources]
@@ -88,6 +92,10 @@ class XSLTransformer(threading.Thread):
                 self.rules.append( Rule(sec, items) )
             if sec.startswith('dest'):
                 self.destinations[sec] = Destination(sec, items)
+        try:
+            self.archive_processed_files = config.getboolean('process','archive')
+        except ConfigParser.NoOptionError:
+            self.archive_processed_files = True
         pass
 
     def log_error( self, message):
@@ -98,7 +106,7 @@ class XSLTransformer(threading.Thread):
             'XSLTransformer', 4, 0,
             win32evtlogutil.win32evtlog.EVENTLOG_ERROR_TYPE,
             message,
-            str(traceback.print_exc(sys.exc_info()) ) )
+            traceback.format_exc(sys.exc_info()) )
 
     def process_file(self, file_name):
         """
@@ -233,7 +241,7 @@ class XSLTransformer(threading.Thread):
         pass
 
 def main():
-    transformer = XSLTransformer( 'XSLTransformer.cfg')
+    transformer = XSLTransformer( 'XSLTransformer.ini')
     transformer.process_sources()
 
 if __name__ == '__main__':

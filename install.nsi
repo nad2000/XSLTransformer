@@ -50,9 +50,9 @@ Section "MainSection" SEC01
   CreateDirectory "$SMPROGRAMS\${PRODUCT_NAME}"
   CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\${PRODUCT_NAME}.lnk" "$INSTDIR\${PRODUCT_SHORT_NAME}.exe"
   CreateShortCut "$DESKTOP\${PRODUCT_NAME}.lnk" "$INSTDIR\${PRODUCT_SHORT_NAME}.exe"
-  IfFileExists "$INSTDIR\XSLTransformer.cfg" +1
-	File XSLTransformer.cfg
-  File /x "dist\XSLTransformer.cfg" "dist\*.*"
+  IfFileExists "$INSTDIR\XSLTransformer.ini" +1
+	File XSLTransformer.ini
+  File /x "dist\XSLTransformer.ini" "dist\*.*"
 SectionEnd
 
 Section -AdditionalIcons
