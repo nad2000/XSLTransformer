@@ -254,12 +254,7 @@ class XSLTransformer( object):
             log_error( "Failed to tranfer file %s to the destination %s" %
                             (output_file_name, rule_to_apply.destination) )
             return False
-            
-        try:
-            os.remove(output_file_name)
-        except:
-            self.log_error( "Failed to delete output file %s" % output_file_name )
-            return False
+
 
         if self.archive_processed_files:
             archive_name = os.path.join(
