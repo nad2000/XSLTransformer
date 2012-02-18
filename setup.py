@@ -12,7 +12,7 @@
 # Configuration settings:
 NAME = 'XSLTransformerService'
 DESCRIPTION = 'XSLTransformer Service'
-VERSION = '1.02'
+VERSION = '1.03'
 PUBLISHER = 'http://www.nowITworks.eu'
 WEBSITE = PUBLISHER
 REVISION = NAME + ' ' + VERSION

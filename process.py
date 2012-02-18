@@ -197,7 +197,7 @@ class XSLTransformer( object):
                 '.bad',
                 os.path.basename( file_name))
             try:
-                os.renames(file_name, archive_name)
+                os.renames(file_name, bad_file_name)
                 pass
             except:
                 log_error( "Failed to move file %s into bad-file directory" % file_name )
