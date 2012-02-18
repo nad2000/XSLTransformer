@@ -9,10 +9,29 @@
 # Licence:  WTFPL
 #-------------------------------------------------------------------------------
 
-# constants:
+# Configuration settings:
 NAME = 'XSLTransformerService'
 DESCRIPTION = 'XSLTransformer Service'
-VERSION = '1.00'
+VERSION = '1.02'
+PUBLISHER = 'http://www.nowITworks.eu'
+WEBSITE = PUBLISHER
+REVISION = NAME + ' ' + VERSION
+
+nsh = open('config.nsh','w')
+print >>nsh, """
+!define PRODUCT_NAME "%s"
+!define PRODUCT_VERSION "%s"
+!define PRODUCT_PUBLISHER "%s"
+!define PRODUCT_WEB_SITE "%s"
+!define PRODUCT_SHORT_NAME "%s"
+""" % (
+        DESCRIPTION,
+        VERSION,
+        PUBLISHER,
+        WEBSITE,
+        NAME )
+
+nsh.close()
 
 import sys
 buildservice = True
@@ -66,7 +85,8 @@ if not buildservice:
         console = [
             {
                 'script':'process.py',
-                'icon_resources': [(1, 'app.ico')]
+                'icon_resources': [(1, 'app.ico')],
+                'other_resources': [(u"VERSIONTAG",1,REVISION)],
             }
         ],
         zipfile=None,
@@ -87,7 +107,8 @@ else:
             service = [{
                 'modules':["XSLTransformerService"],
                 'cmdline':'pywin32',
-                'icon_resources': [(1, 'app.ico')]
+                'icon_resources': [(1, 'app.ico')],
+                'other_resources': [(u"VERSIONTAG",1,REVISION)],
             }],
             zipfile=None,
             options = {

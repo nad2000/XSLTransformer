@@ -9,7 +9,7 @@
 # Licence:  WTFPL
 #-------------------------------------------------------------------------------
 
-import process
+from process import *
 import win32serviceutil, win32event, win32service, win32evtlogutil, win32evtlog, sys, os, thread
 import servicemanager
 from _winreg import EnumValue, OpenKey, HKEY_LOCAL_MACHINE, KEY_ALL_ACCESS
@@ -60,14 +60,14 @@ class XSLTransformerServiceLauncher(win32serviceutil.ServiceFramework):
                     app_key_values['Path'] if app_key_values.has_key('Path')
                                               and os.path.exists(app_key_values['Path'])
                     else os.getcwd(),
-                    process.DEFALT_CONFIG_FILE )
+                    DEFALT_CONFIG_FILE )
         win32evtlogutil.ReportEvent(
             self._svc_name_,
             4, #servicemanager.PYS_SERVICE_STARTED,
             0,  # category
-            win32evtlog.EVENTLOG_ERROR_TYPE, ##win32evtlog.EVENTLOG_INFORMATION_TYPE,
-            "Attempt to start service with configuration: %s" % config_file )
-        transformer = process.XSLTransformer(config_file)
+            win32evtlog.EVENTLOG_INFORMATION_TYPE,
+            ( ("Attempt to start service with configuration: %s" % config_file).encode('ascii', 'ignore'),) )
+        transformer = XSLTransformer(config_file)
 
         self.timeout = 100
         # If no files found sleep 10 sec
@@ -77,17 +77,22 @@ class XSLTransformerServiceLauncher(win32serviceutil.ServiceFramework):
 
             # wait for service stop signal, if timeout, loop again
             rc=win32event.WaitForSingleObject(self.hWaitStop, self.timeout)
-            processed_files = transformer.process_sources()
+            try:
+                processed_files = transformer.process_sources()
+            except:
+                log_error( 'Unhandled error processing sources' )
+                break
+
             if processed_files==0:
                 # if no files have been processed sleep for 10sec
                 rc=win32event.WaitForSingleObject(self.hWaitStop, self.idle)
-
 
         transformer.close()
 
         win32evtlogutil.ReportEvent(
             self._svc_name_,servicemanager.PYS_SERVICE_STOPPED,0,
-            servicemanager.EVENTLOG_INFORMATION_TYPE,(self._svc_name_, ''))
+            servicemanager.EVENTLOG_INFORMATION_TYPE,
+            ("Sevice stopped: %s" % self._svc_name_, ''))
 
         self.ReportServiceStatus(win32service.SERVICE_STOPPED)
 

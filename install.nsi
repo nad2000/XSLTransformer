@@ -1,16 +1,14 @@
 SetCompressor /SOLID lzma
 
+!include /NONFATAL config.nsh
+
 ; HM NIS Edit Wizard helper defines
-!define PRODUCT_NAME "XSLTransformer Service"
-!define PRODUCT_SHORT_NAME "XSLTransformerService"
-!define PRODUCT_VERSION "0.01"
-!define PRODUCT_PUBLISHER "http://www.nowITworks.eu"
-!define PRODUCT_WEB_SITE "http://www.nowITworks.eu"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\${PRODUCT_SHORT_NAME}.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
 
 ; MUI 1.67 compatible ------
+XPStyle on
 !include "MUI.nsh"
 
 ; MUI Settings
@@ -46,12 +44,20 @@ ShowUnInstDetails show
 Section "MainSection" SEC01
   SetOutPath "$INSTDIR"
   SetOverwrite try
+  ; Stop previously installed service:
+  IfFileExists "$INSTDIR\XSLTransformer.ini" 0 +2
+	ExecWait '"$INSTDIR\${PRODUCT_SHORT_NAME}.exe" -remove'
+
   File "dist\${PRODUCT_SHORT_NAME}.exe"
   CreateDirectory "$SMPROGRAMS\${PRODUCT_NAME}"
   CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\${PRODUCT_NAME}.lnk" "$INSTDIR\${PRODUCT_SHORT_NAME}.exe"
   CreateShortCut "$DESKTOP\${PRODUCT_NAME}.lnk" "$INSTDIR\${PRODUCT_SHORT_NAME}.exe"
-  IfFileExists "$INSTDIR\XSLTransformer.ini" +1
+  ; Preserve the existing configuration:
+  SetOverwrite off
+  IfFileExists "$INSTDIR\XSLTransformer.ini" +2
 	File XSLTransformer.ini
+
+  SetOverwrite try
   File /x "dist\XSLTransformer.ini" "dist\*.*"
 SectionEnd
 
