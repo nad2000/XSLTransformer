@@ -45,7 +45,8 @@ Section "MainSection" SEC01
   SetOutPath "$INSTDIR"
   SetOverwrite try
   ; Stop previously installed service:
-  IfFileExists "$INSTDIR\XSLTransformer.ini" 0 +2
+  IfFileExists "$INSTDIR\${PRODUCT_SHORT_NAME}.exe" 0 +3
+	ExecWait 'net stop ${PRODUCT_SHORT_NAME}'
 	ExecWait '"$INSTDIR\${PRODUCT_SHORT_NAME}.exe" -remove'
 
   File "dist\${PRODUCT_SHORT_NAME}.exe"
