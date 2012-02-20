@@ -50,9 +50,9 @@ Section "MainSection" SEC01
 	ExecWait '"$INSTDIR\${PRODUCT_SHORT_NAME}.exe" -remove'
 
   File "dist\${PRODUCT_SHORT_NAME}.exe"
-  CreateDirectory "$SMPROGRAMS\${PRODUCT_NAME}"
-  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\${PRODUCT_NAME}.lnk" "$INSTDIR\${PRODUCT_SHORT_NAME}.exe"
-  CreateShortCut "$DESKTOP\${PRODUCT_NAME}.lnk" "$INSTDIR\${PRODUCT_SHORT_NAME}.exe"
+  ;;CreateDirectory "$SMPROGRAMS\${PRODUCT_NAME}"
+  ;;CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\${PRODUCT_NAME}.lnk" "$INSTDIR\${PRODUCT_SHORT_NAME}.exe"
+  ;;CreateShortCut "$DESKTOP\${PRODUCT_NAME}.lnk" "$INSTDIR\${PRODUCT_SHORT_NAME}.exe"
   ; Preserve the existing configuration:
   SetOverwrite off
   IfFileExists "$INSTDIR\XSLTransformer.ini" +2
@@ -62,11 +62,11 @@ Section "MainSection" SEC01
   File /x "dist\XSLTransformer.ini" "dist\*.*"
 SectionEnd
 
-Section -AdditionalIcons
-  WriteIniStr "$INSTDIR\${PRODUCT_NAME}.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}"
-  CreateShortCut "$SMPROGRAMS\Association Voice Data Extractor\Website.lnk" "$INSTDIR\${PRODUCT_NAME}.url"
-  CreateShortCut "$SMPROGRAMS\Association Voice Data Extractor\Uninstall.lnk" "$INSTDIR\uninst.exe"
-SectionEnd
+;;Section -AdditionalIcons
+  ;;WriteIniStr "$INSTDIR\${PRODUCT_NAME}.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}"
+  ;;CreateShortCut "$SMPROGRAMS\{PRODUCT_NAME}\Website.lnk" "$INSTDIR\${PRODUCT_NAME}.url"
+  ;;CreateShortCut "$SMPROGRAMS\{PRODUCT_NAME}\Uninstall.lnk" "$INSTDIR\uninst.exe"
+;;SectionEnd
 
 Section -Post
   WriteUninstaller "$INSTDIR\uninst.exe"
@@ -95,15 +95,18 @@ Function un.onInit
 FunctionEnd
 
 Section Uninstall
+  ExecWait 'net stop ${PRODUCT_SHORT_NAME}'
+  ExecWait '"$INSTDIR\${PRODUCT_SHORT_NAME}.exe" -remove'
+
   Delete "$INSTDIR\${PRODUCT_NAME}.url"
   Delete "$INSTDIR\*.*"
 
-  Delete "$SMPROGRAMS\Association Voice Data Extractor\Uninstall.lnk"
-  Delete "$SMPROGRAMS\Association Voice Data Extractor\Website.lnk"
-  Delete "$DESKTOP\Association Voice Data Extractor.lnk"
-  Delete "$SMPROGRAMS\Association Voice Data Extractor\Association Voice Data Extractor.lnk"
+  Delete "$SMPROGRAMS\${PRODUCT_NAME}\Uninstall.lnk"
+  Delete "$SMPROGRAMS\${PRODUCT_NAME}\Website.lnk"
+  Delete "$DESKTOP\${PRODUCT_NAME}.lnk"
+  Delete "$SMPROGRAMS\${PRODUCT_NAME}\${PRODUCT_NAME}.lnk"
 
-  RMDir "$SMPROGRAMS\Association Voice Data Extractor"
+  RMDir "$SMPROGRAMS\${PRODUCT_NAME}"
   RMDir "$INSTDIR"
 
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
