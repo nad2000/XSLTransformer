@@ -186,7 +186,11 @@ class XSLTransformer( object):
             return
 
         try:
-            doc = libxml2.parseDoc( source_file.read() )
+            doc_content = source_file.read().encode("UTF-8")
+            if self.debug:
+                log_info( "Parsing document:\n%s" % doc_content)
+
+            doc = libxml2.parseDoc( doc_content)
             source_file.close()
         except:
             log_error( "Error parsing source file %s" % file_name )
