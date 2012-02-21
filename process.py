@@ -179,14 +179,26 @@ class XSLTransformer( object):
             log_info( "Start processing file %s" % file_name)
 
         self.exit_if_stopped()
+        if not os.path.exists( file_name ):
+            log_error( 'File %s does not exists' % file_name)
+            return False
+        if not os.access( file_name, os.R_OK):
+            log_error( 'No access to read file %s' % file_name)
+            return False
+
         try:
             source_file = open( file_name, 'rb')
         except:
-            # TODO: file might be locked, procede with the next
-            return
+            log_error( 'Failed to open file %s' % file_name )
+            return False
 
         try:
-            doc_content = source_file.read().encode("UTF-8")
+            doc_content = source_file.read()
+        except:
+            log_error( 'Failed to read file %s' % file_name )
+            return False
+
+        try:
             if self.debug:
                 log_info( "Parsing document:\n%s" % doc_content)
 
