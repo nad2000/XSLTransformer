@@ -9,7 +9,7 @@
 # Licence:  WTFPL
 #-------------------------------------------------------------------------------
 
-import glob, os, os.path, sys, traceback, time
+import glob, os, os.path, sys, traceback, time, codecs
 import ConfigParser
 import libxml2, libxslt, unicodedata
 from ftplib import FTP
@@ -164,6 +164,43 @@ class XSLTransformer( object):
             self.debug = False
         pass
 
+    def open(self, filename, mode='r', bufsize=-1, fallback_encoding='utf_8'):
+        if "r" in mode or "a" in mode: # we are interested of detecting the mode only for read text
+            try:
+                f = open(filename, "rb")
+                bom = bytes(f.read(4))
+                f.close()
+            except:
+                bom=b''
+            if bytes(bom[:3]) ==   b'\xEF\xBB\xBF' :
+                f = codecs.open(filename, mode, "utf_8")
+                f.seek(3,0)
+                f.BOM = codecs.BOM_UTF8
+            elif bytes(bom[:2]) == b'\xFF\xFE':
+                f = codecs.open(filename, mode, "utf_16_le")
+                f.seek(2,0)
+                f.BOM = codecs.BOM_UTF16_LE
+            elif bytes(bom[:2]) == b'\xFE\xFF':
+                f = codecs.open(filename, mode, "utf_16_be")
+                f.seek(2,0)
+                f.BOM = codecs.BOM_UTF16_BE
+            elif bytes(bom[:4]) == b'\xFF\xFE\x00\x00':
+                f = codecs.open(filename, mode, "utf_32_le")
+                f.seek(4,0)
+                f.BOM = codecs.BOM_UTF32_LE
+            elif bytes(bom[:4]) == b'\x00\x00\xFE\xFF':
+                f = codecs.open(filename, mode, "utf_32_be")
+                f.seek(4,0)
+                f.BOM = codecs.BOM_UTF32_BE
+            else:  # we assume that if there is no BOM, the encoding is UTF-8
+                f = codecs.open(filename, mode, fallback_encoding)
+                f.seek(0)
+                f.BOM = None
+            return f
+        else:
+            log_error( "Calling unicode.open(%s,%s,%s) that may be wrong." \
+                        % (filename, mode, bufsize) )
+
 
     def process_file(self, file_name):
         """
@@ -187,10 +224,13 @@ class XSLTransformer( object):
             return False
 
         try:
-            source_file = open( file_name, 'rb')
+            source_file = self.open( file_name)
         except:
             log_error( 'Failed to open file %s' % file_name )
             return False
+
+        if self.debug:
+            log_info( "File %s encodes wiht %s" % ( file_name, source_file.encoding ) )
 
         try:
             doc_content = source_file.read()
@@ -212,6 +252,13 @@ class XSLTransformer( object):
                 os.path.dirname( file_name),
                 '.bad',
                 os.path.basename( file_name))
+
+            if os.path.exists( bad_file_name):
+                try:
+                    os.remove( bad_file_name)
+                except:
+                    pass
+
             try:
                 os.renames(file_name, bad_file_name)
                 pass
@@ -278,10 +325,11 @@ class XSLTransformer( object):
                 '.archive',
                 os.path.basename( file_name))
 
-            try:
-                os.remove( archive_name)
-            except:
-                pass
+            if os.path.exists(archive_name):
+                try:
+                    os.remove( archive_name)
+                except:
+                    pass
 
             try:
                 os.renames(file_name, archive_name)
