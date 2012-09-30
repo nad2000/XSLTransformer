@@ -16,13 +16,20 @@ from _winreg import EnumValue, OpenKey, HKEY_LOCAL_MACHINE, KEY_ALL_ACCESS
 
 sys.stopdriver = False
 
+SVC_NAME = 'XSLTransformerService'
+SVC_DISPLAY_NAME = 'XSLTransformer Service'
+
 class XSLTransformerServiceLauncher(win32serviceutil.ServiceFramework):
 
-    _svc_name_ = 'XSLTransformerService'
-    _svc_display_name_ = 'XSLTransformer Service'
+    _svc_name_ = SVC_NAME
+    _svc_display_name_ = SVC_DISPLAY_NAME
     _svc_deps_ = ["EventLog"]
 
     def __init__(self, args):
+
+        # Register Event log source:
+        win32evtlogutil.AddSourceToRegistry( SVC_NAME, eventLogType = 'Application')
+
         win32serviceutil.ServiceFramework.__init__(self, args)
         self.hWaitStop = win32event.CreateEvent(None, 0, 0, None)
         self.isAlive=True

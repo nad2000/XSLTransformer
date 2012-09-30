@@ -132,6 +132,9 @@ class XSLTransformer( object):
         and destinations of transformed files.
         """
 
+        # Register Event log source:
+        win32evtlogutil.AddSourceToRegistry('XSLTransformer', eventLogType = 'Application')
+
         self.config = config = ConfigParser.ConfigParser()
         try:
             if not( config_file and os.path.exists(config_file) ):
@@ -173,27 +176,36 @@ class XSLTransformer( object):
             except:
                 bom=b''
             if bytes(bom[:3]) ==   b'\xEF\xBB\xBF' :
-                f = codecs.open(filename, mode, "utf_8")
+                f = codecs.open(filename, mode, 'utf_8')
                 f.seek(3,0)
                 f.BOM = codecs.BOM_UTF8
             elif bytes(bom[:2]) == b'\xFF\xFE':
-                f = codecs.open(filename, mode, "utf_16_le")
+                f = codecs.open(filename, mode, 'utf_16_le')
                 f.seek(2,0)
                 f.BOM = codecs.BOM_UTF16_LE
             elif bytes(bom[:2]) == b'\xFE\xFF':
-                f = codecs.open(filename, mode, "utf_16_be")
+                f = codecs.open(filename, mode, 'utf_16_be')
                 f.seek(2,0)
                 f.BOM = codecs.BOM_UTF16_BE
             elif bytes(bom[:4]) == b'\xFF\xFE\x00\x00':
-                f = codecs.open(filename, mode, "utf_32_le")
+                f = codecs.open(filename, mode, 'utf_32_le')
                 f.seek(4,0)
                 f.BOM = codecs.BOM_UTF32_LE
             elif bytes(bom[:4]) == b'\x00\x00\xFE\xFF':
-                f = codecs.open(filename, mode, "utf_32_be")
+                f = codecs.open(filename, mode, 'utf_32_be')
                 f.seek(4,0)
                 f.BOM = codecs.BOM_UTF32_BE
-            else:  # we assume that if there is no BOM, the encoding is UTF-8
-                f = codecs.open(filename, mode, fallback_encoding)
+            else:
+                # try to use chardet:
+                import chardet
+                f = open(filename,'rb')
+                cd = chardet.detect( f.read() )
+                f.close()
+                log_info( "Auto-detected encoding '%(encoding)s' with confidence %(confidence)s" % cd)
+                confidence = cd['confidence']
+                # If we have confidence at least 0.5 use the detected encoding
+                # or else the fallback encoding:
+                f= codecs.open(filename, mode, cd['encoding'] if confidence >= 0.5 else fallback_encoding)
                 f.seek(0)
                 f.BOM = None
             return f
@@ -236,6 +248,12 @@ class XSLTransformer( object):
             doc_content = source_file.read()
         except:
             log_error( 'Failed to read file %s' % file_name )
+            return False
+
+        try:
+            doc_content = doc_content.encode("UTF-8")
+        except:
+            log_error( 'Failed to transcode file %s into UTF-8 from %s' % (file_name, source_file.encoding) )
             return False
 
         try:
@@ -387,7 +405,13 @@ class XSLTransformer( object):
 
 def main():
     transformer = XSLTransformer( 'XSLTransformer.ini')
-    transformer.process_sources()
+    if len(sys.argv) > 1 and os.path.exists(sys.argv[1]):
+        # Process only one file if specified:
+        transformer.process_file( sys.argv[1])
+        pass
+    else:
+        # Process all files in source directories
+        transformer.process_sources()
 
 if __name__ == '__main__':
     main()
