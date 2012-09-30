@@ -1,0 +1,14 @@
+*.pyc
+*.pyc
+*.bak
+config.nsh
+*.exe
+.*.sw[pon]
+.rvmrc
+Gemfile.lock
+coverage
+pkg
+build
+ddls
+data
+dist
